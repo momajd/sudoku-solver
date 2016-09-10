@@ -7,8 +7,18 @@ var Tile = function(val, row, col, tileSize, color) {
 };
 
 Tile.prototype.drawTile = function (context) {
+  this.clearTile(context);
   var size = this.tileSize;
   context.font = "20px Georgia"; //TODO use cool google font
   context.fillStyle = this.color;
   context.fillText(this.val, this.row * size + size/2, this.col * size + size/2);
+};
+
+Tile.prototype.clearTile = function (context) {
+  context.clearRect(
+    this.row * this.tileSize + 1/10 * this.tileSize,
+    this.col * this.tileSize + 1/10 * this.tileSize,
+    this.tileSize * 4/5,
+    this.tileSize * 4/5
+  );
 };

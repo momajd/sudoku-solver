@@ -65,7 +65,6 @@ Board.prototype.isValidSudoku = function () {
   return true;
 };
 
-var animationCount = 0; //TODO remove 
 Board.prototype.solveSudoku = function () {
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
@@ -76,8 +75,8 @@ Board.prototype.solveSudoku = function () {
       for (var k = 0; k < vals.length; k++) {
         this.grid[i][j] = vals[k];
 
-        var tile = new Tile(vals[k], i, j, this.size / 9, 'blue');
-        this.view.renderCandidateTile(tile);
+        let tile = new Tile(vals[k], i, j, this.size / 9, 'blue');
+        this.view.addToAnimationQueue(tile);
 
         if (this.isValidSudoku() ) {
           if (this.solveSudoku()) {
@@ -85,9 +84,9 @@ Board.prototype.solveSudoku = function () {
           }
         }
         this.grid[i][j] = "."; //wasn't able to solve so backtrack
-        animationCount++;
-        this.view.clearIncorrectTile(tile);
       }
+      let removal = new Tile("", i, j, this.size / 9);
+      this.view.addToAnimationQueue(removal);
       return false; //no vals satisfy isValidSudoku
     }
   }

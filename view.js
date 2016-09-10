@@ -5,22 +5,30 @@ var View = function (context) {
 };
 
 View.prototype.renderCandidateTile = function (tile) {
-  var context = this.context
-  setTimeout(function () {
-    tile.drawTile(context);
-  }, animationCount * window.speed)
+  tile.drawTile(this.context);
 }
 
 View.prototype.clearIncorrectTile = function (tile) {
-  var context = this.context;
-  setTimeout(function () {
-    context.clearRect(
-      tile.row * tile.tileSize + 1/10 * tile.tileSize,
-      tile.col * tile.tileSize + 1/10 * tile.tileSize,
-      tile.tileSize * 4/5,
-      tile.tileSize * 4/5
-    );
-  }, animationCount * window.speed)
+  tile.clearTile(this.context);
+}
+
+View.prototype.addToAnimationQueue = function(tile) {
+  this.animationQueue.push(tile);
+}
+
+View.prototype.solveAndAnimate = function () {
+  this.board.solveSudoku();
+  var self = this;
+  var animation = setInterval(function () {
+    if (self.animationQueue.length === 1) {clearTimeout(animation)}
+    var tile = self.animationQueue.shift();
+
+    if (tile.val === "") {
+      self.clearIncorrectTile(tile);
+    } else {
+      self.renderCandidateTile(tile);
+    }
+  }, 100);
 }
 
 View.prototype.drawBoard = function () {
