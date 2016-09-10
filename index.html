@@ -7,6 +7,7 @@
   <body>
     <script type='text/javascript' src='tile.js'></script>
     <script type='text/javascript' src='board.js'></script>
+    <script type='text/javascript' src='view.js'></script>
     <canvas id="myCanvas" width="600" height="600" style="border:1px solid #000000;">
     </canvas>
 
@@ -15,11 +16,11 @@
       var context = canvas.getContext('2d');
       var boardSize = 400;
 
-      var board = new Board(context, boardSize)
-      board.drawBoard();
+      var view = new View(context);
+      view.drawBoard();
 
       function solve() {
-        board.solveSudoku();
+        view.board.solveSudoku();
       }
 
       function adjustSpeed(val) {

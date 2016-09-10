@@ -34,8 +34,8 @@ var board4 = [
   "6...1...5".split("")
 ];
 
-var Board = function (context, size) {
-  this.context = context;
+var Board = function (view, size) {
+  this.view = view;
   this.size = size;
   this.grid = board1;
 };
@@ -65,7 +65,7 @@ Board.prototype.isValidSudoku = function () {
   return true;
 };
 
-var animationCount = 0;
+var animationCount = 0; //TODO remove 
 Board.prototype.solveSudoku = function () {
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
@@ -77,7 +77,7 @@ Board.prototype.solveSudoku = function () {
         this.grid[i][j] = vals[k];
 
         var tile = new Tile(vals[k], i, j, this.size / 9, 'blue');
-        this.renderCandidateTile(tile);
+        this.view.renderCandidateTile(tile);
 
         if (this.isValidSudoku() ) {
           if (this.solveSudoku()) {
@@ -86,66 +86,10 @@ Board.prototype.solveSudoku = function () {
         }
         this.grid[i][j] = "."; //wasn't able to solve so backtrack
         animationCount++;
-        this.clearIncorrectTile(tile);
+        this.view.clearIncorrectTile(tile);
       }
       return false; //no vals satisfy isValidSudoku
     }
   }
   return true; //board is filled
-};
-
-Board.prototype.renderCandidateTile = function (tile) {
-  var context = this.context
-  setTimeout(function () {
-    tile.drawTile(context);
-  }, animationCount * window.speed)
-}
-
-Board.prototype.clearIncorrectTile = function (tile) {
-  var context = this.context;
-  setTimeout(function () {
-    context.clearRect(
-      tile.row * tile.tileSize + 1/10 * tile.tileSize,
-      tile.col * tile.tileSize + 1/10 * tile.tileSize,
-      tile.tileSize * 4/5,
-      tile.tileSize * 4/5
-    );
-  }, animationCount * window.speed)
-}
-
-// Board.prototype.printBoard = function () {
-//   this.grid.forEach(function(row) {
-//     console.log(row.join(""));
-//   });
-//   console.log("");
-// };
-
-Board.prototype.drawBoard = function () {
-  var tileSize = this.size / 9;
-  var context = this.context;
-  // heavy lines around 3 x 3 tiles
-  for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++) {
-      context.rect(i * 3 * tileSize, j * 3 * tileSize, 3 * tileSize, 3 * tileSize);
-      context.lineWidth = 4;
-      context.strokeStyle = 'black';
-      context.stroke();
-    }
-  }
-
-  // this lines around each tile
-  for (i = 0; i < 9; i++) {
-    for (j = 0; j < 9; j++) {
-      context.rect(i * tileSize, j * tileSize, tileSize, tileSize);
-      context.lineWidth = 1;
-      context.strokeStyle = 'black';
-      context.stroke();
-
-      var tileValue = this.grid[i][j] === "." ? "" : this.grid[i][j];
-      let tile = new Tile(tileValue, i, j, tileSize, 'black');
-      setTimeout(function() {
-        tile.drawTile(context);
-      }, j * 125)
-    }
-  }
 };
