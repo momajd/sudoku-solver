@@ -11,27 +11,15 @@ var board1 = [
 ];
 
 var board2 = [
-  "6.318275.".split(""),
-  "871569.24".split(""),
-  "2957.3681".split(""),
-  "734956218".split(""),
-  "982.71536".split(""),
-  "15632894.".split(""),
-  "36.294175".split(""),
-  "4276158.3".split(""),
-  "519.37462".split("")
-];
-
-var board3 = [
-  "643182759".split(""),
-  "871569324".split(""),
-  "295743681".split(""),
-  "734956218".split(""),
-  "982471536".split(""),
-  "156328947".split(""),
-  "36.294175".split(""),
-  "427615893".split(""),
-  "519837462".split("")
+  ".........".split(""),
+  ".........".split(""),
+  ".........".split(""),
+  ".........".split(""),
+  ".........".split(""),
+  ".........".split(""),
+  ".........".split(""),
+  ".........".split(""),
+  ".........".split("")
 ];
 
 var board4 = [
@@ -49,7 +37,7 @@ var board4 = [
 var Board = function (context, size) {
   this.context = context;
   this.size = size;
-  this.grid = board4;
+  this.grid = board1;
 };
 
 Board.prototype.isValidSudoku = function () {
@@ -89,8 +77,7 @@ Board.prototype.solveSudoku = function () {
         this.grid[i][j] = vals[k];
 
         var tile = new Tile(vals[k], i, j, this.size / 9, 'blue');
-        this.placeCandidateTile(tile);
-        animationCount++;
+        this.renderCandidateTile(tile);
 
         if (this.isValidSudoku() ) {
           if (this.solveSudoku()) {
@@ -107,11 +94,11 @@ Board.prototype.solveSudoku = function () {
   return true; //board is filled
 };
 
-Board.prototype.placeCandidateTile = function (tile) {
+Board.prototype.renderCandidateTile = function (tile) {
   var context = this.context
   setTimeout(function () {
     tile.drawTile(context);
-  }, animationCount * 100)
+  }, animationCount * window.speed)
 }
 
 Board.prototype.clearIncorrectTile = function (tile) {
@@ -123,7 +110,7 @@ Board.prototype.clearIncorrectTile = function (tile) {
       tile.tileSize * 4/5,
       tile.tileSize * 4/5
     );
-  }, animationCount * 100)
+  }, animationCount * window.speed)
 }
 
 // Board.prototype.printBoard = function () {
