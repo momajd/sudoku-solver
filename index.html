@@ -8,17 +8,16 @@
     <script type='text/javascript' src='tile.js'></script>
     <script type='text/javascript' src='board.js'></script>
     <script type='text/javascript' src='view.js'></script>
-    <script type='text/javascript' src='style.css'></script>
-    <link rel="stylesheet" href="style.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
     <canvas id="myCanvas" width="600" height="600" style="border:1px solid #000000;">
     </canvas>
 
     <script>
       var canvas = document.getElementById('myCanvas');
       var context = canvas.getContext('2d');
-      var boardSize = 400;
+      var boardSize = 600;
 
-      var view = new View(context);
+      var view = new View(context, boardSize);
       view.drawBoard();
 
       function solve() {

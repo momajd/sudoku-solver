@@ -1,15 +1,24 @@
-var View = function (context) {
+var View = function (context, boardSize) {
   this.context = context;
-  this.board = new Board(this, 400);
+  this.board = new Board(this, boardSize);
   this.animationQueue = [];
 };
 
-View.prototype.renderCandidateTile = function (tile) {
-  tile.drawTile(this.context);
+View.prototype.renderTile = function (tile) {
+  this.clearTile(tile);
+  var size = tile.tileSize;
+  context.font = "20px Georgia"; //TODO use cool google font
+  context.fillStyle = tile.color;
+  context.fillText(tile.val, tile.row * size + size/2, tile.col * size + size/2);
 }
 
-View.prototype.clearIncorrectTile = function (tile) {
-  tile.clearTile(this.context);
+View.prototype.clearTile = function (tile) {
+  context.clearRect(
+    tile.row * tile.tileSize + 1/10 * tile.tileSize,
+    tile.col * tile.tileSize + 1/10 * tile.tileSize,
+    tile.tileSize * 4/5,
+    tile.tileSize * 4/5
+  );
 }
 
 View.prototype.addToAnimationQueue = function(tile) {
@@ -17,15 +26,16 @@ View.prototype.addToAnimationQueue = function(tile) {
 }
 
 View.prototype.animate = function () {
+  if (this.animationQueue.length === 0) {return;}
+  let tile = this.animationQueue.shift();
+
   var self = this;
   var timing = document.getElementById('slider').value;
-  let tile = self.animationQueue.shift();
-  
   setTimeout(function() {
     if (tile.val === "") {
-      self.clearIncorrectTile(tile);
+      self.clearTile(tile);
     } else {
-      self.renderCandidateTile(tile);
+      self.renderTile(tile);
     }
     self.animate();
   }, timing);
@@ -55,8 +65,8 @@ View.prototype.drawBoard = function () {
       var tileValue = this.board.grid[i][j] === "." ? "" : this.board.grid[i][j];
       let tile = new Tile(tileValue, i, j, tileSize, 'black');
       setTimeout(function() {
-        tile.drawTile(context);
-      }, j * 125)
+        this.renderTile(tile);
+      }.bind(this), j * 125)
     }
   }
 };

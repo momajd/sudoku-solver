@@ -37,7 +37,7 @@ var board4 = [
 var Board = function (view, size) {
   this.view = view;
   this.size = size;
-  this.grid = board1;
+  this.grid = board4;
 };
 
 Board.prototype.isValidSudoku = function () {
