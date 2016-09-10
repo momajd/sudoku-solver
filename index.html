@@ -5,6 +5,25 @@
     <title></title>
   </head>
   <body>
+    <script type='text/javascript' src='tile.js'></script>
     <script type='text/javascript' src='board.js'></script>
+    <canvas id="myCanvas" width="400" height="400" style="border:1px solid #000000;">
+    </canvas>
+
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      var tileSize = 40
+
+      var board = new Board
+      board.drawBoard(context, tileSize);
+
+      function solve() {
+        board.solveSudoku();
+        board.drawBoard(context, tileSize);
+      }
+    </script>
+
+    <button onclick='solve()'>Solve</button>
   </body>
 </html>
