@@ -8,6 +8,8 @@
     <script type='text/javascript' src='tile.js'></script>
     <script type='text/javascript' src='board.js'></script>
     <script type='text/javascript' src='view.js'></script>
+    <script type='text/javascript' src='style.css'></script>
+    <link rel="stylesheet" href="style.css" media="screen" title="no title" charset="utf-8">
     <canvas id="myCanvas" width="600" height="600" style="border:1px solid #000000;">
     </canvas>
 
@@ -20,19 +22,13 @@
       view.drawBoard();
 
       function solve() {
-        // view.board.solveSudoku();
-        // console.log(view);
-        view.solveAndAnimate();
-      }
-
-      function adjustSpeed(val) {
-        window.speed = val;
+        view.board.solveSudoku();
+        view.animate();
       }
     </script>
 
     <button onclick='solve()'>Solve</button>
     <br/>
-    Speed:
-    <input id='slider' type='range' min='1' max='100' onchange='adjustSpeed(this.value)'>
+    fast<input id='slider' type='range' min='0' max='250'>slow
   </body>
 </html>

@@ -16,19 +16,19 @@ View.prototype.addToAnimationQueue = function(tile) {
   this.animationQueue.push(tile);
 }
 
-View.prototype.solveAndAnimate = function () {
-  this.board.solveSudoku();
+View.prototype.animate = function () {
   var self = this;
-  var animation = setInterval(function () {
-    if (self.animationQueue.length === 1) {clearTimeout(animation)}
-    var tile = self.animationQueue.shift();
-
+  var timing = document.getElementById('slider').value;
+  let tile = self.animationQueue.shift();
+  
+  setTimeout(function() {
     if (tile.val === "") {
       self.clearIncorrectTile(tile);
     } else {
       self.renderCandidateTile(tile);
     }
-  }, 100);
+    self.animate();
+  }, timing);
 }
 
 View.prototype.drawBoard = function () {
