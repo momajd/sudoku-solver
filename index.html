@@ -7,20 +7,19 @@
   <body>
     <script type='text/javascript' src='tile.js'></script>
     <script type='text/javascript' src='board.js'></script>
-    <canvas id="myCanvas" width="400" height="400" style="border:1px solid #000000;">
+    <canvas id="myCanvas" width="600" height="600" style="border:1px solid #000000;">
     </canvas>
 
     <script>
       var canvas = document.getElementById('myCanvas');
       var context = canvas.getContext('2d');
-      var tileSize = 40
+      var boardSize = 400;
 
-      var board = new Board
-      board.drawBoard(context, tileSize);
+      var board = new Board(context, boardSize)
+      board.drawBoard();
 
       function solve() {
         board.solveSudoku();
-        board.drawBoard(context, tileSize);
       }
     </script>
 

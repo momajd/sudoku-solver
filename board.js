@@ -46,7 +46,9 @@ var board4 = [
   "6...1...5".split("")
 ];
 
-var Board = function () {
+var Board = function (context, size) {
+  this.context = context;
+  this.size = size;
   this.grid = board4;
 };
 
@@ -75,21 +77,29 @@ Board.prototype.isValidSudoku = function () {
   return true;
 };
 
+var animationCount = 0;
 Board.prototype.solveSudoku = function () {
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
       if (this.grid[i][j] !== ".") { continue; }
 
       var vals = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-      this.printBoard();
+
       for (var k = 0; k < vals.length; k++) {
         this.grid[i][j] = vals[k];
+
+        var tile = new Tile(vals[k], i, j, this.size / 9, 'blue');
+        this.placeCandidateTile(tile);
+        animationCount++;
+
         if (this.isValidSudoku() ) {
           if (this.solveSudoku()) {
             return true;
           }
         }
         this.grid[i][j] = "."; //wasn't able to solve so backtrack
+        animationCount++;
+        this.clearIncorrectTile(tile);
       }
       return false; //no vals satisfy isValidSudoku
     }
@@ -97,14 +107,35 @@ Board.prototype.solveSudoku = function () {
   return true; //board is filled
 };
 
-Board.prototype.printBoard = function () {
-  this.grid.forEach(function(row) {
-    console.log(row.join(""));
-  });
-  console.log("");
-};
+Board.prototype.placeCandidateTile = function (tile) {
+  var context = this.context
+  setTimeout(function () {
+    tile.drawTile(context);
+  }, animationCount * 100)
+}
 
-Board.prototype.drawBoard = function (context, tileSize) {
+Board.prototype.clearIncorrectTile = function (tile) {
+  var context = this.context;
+  setTimeout(function () {
+    context.clearRect(
+      tile.row * tile.tileSize + 1/10 * tile.tileSize,
+      tile.col * tile.tileSize + 1/10 * tile.tileSize,
+      tile.tileSize * 4/5,
+      tile.tileSize * 4/5
+    );
+  }, animationCount * 100)
+}
+
+// Board.prototype.printBoard = function () {
+//   this.grid.forEach(function(row) {
+//     console.log(row.join(""));
+//   });
+//   console.log("");
+// };
+
+Board.prototype.drawBoard = function () {
+  var tileSize = this.size / 9;
+  var context = this.context;
   // heavy lines around 3 x 3 tiles
   for (var i = 0; i < 3; i++) {
     for (var j = 0; j < 3; j++) {
@@ -124,8 +155,10 @@ Board.prototype.drawBoard = function (context, tileSize) {
       context.stroke();
 
       var tileValue = this.grid[i][j] === "." ? "" : this.grid[i][j];
-      let tile = new Tile(tileValue, i, j, tileSize);
-      tile.drawTile(context);
+      let tile = new Tile(tileValue, i, j, tileSize, 'black');
+      setTimeout(function() {
+        tile.drawTile(context);
+      }, j * 125)
     }
   }
 };
