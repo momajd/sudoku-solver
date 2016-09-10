@@ -75,7 +75,7 @@ Board.prototype.solveSudoku = function () {
       for (var k = 0; k < vals.length; k++) {
         this.grid[i][j] = vals[k];
 
-        let tile = new Tile(vals[k], i, j, this.size / 9, 'blue');
+        let tile = new Tile(vals[k], i, j, this.size / 9, 'blue', '40px Permanent Marker');
         this.view.addToAnimationQueue(tile);
 
         if (this.isValidSudoku() ) {

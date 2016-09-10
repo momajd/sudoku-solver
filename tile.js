@@ -1,7 +1,8 @@
-var Tile = function(val, row, col, tileSize, color) {
+var Tile = function(val, row, col, tileSize, color, font) {
   this.val = val;
   this.row = row;
   this.col = col;
   this.tileSize = tileSize;
   this.color = color;
+  this.font = font;
 };

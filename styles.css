@@ -1,3 +1,36 @@
+body, button {
+  font-family: 'Open Sans', sans-serif;
+}
+
+button {
+  font-size: 16px;
+  width: 100px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#canvas {
+  margin: 20px;
+}
+
+.title {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 45px;
+}
+
+.view {
+  display: flex;
+}
+
+.slider-box {
+  border-radius: 6px;
+  padding: 20px;
+}
+
+/*#slider {
+  padding: 6px;
+}*/
+
 input[type=range] {
   -webkit-appearance: none;
   margin: 10px 0;

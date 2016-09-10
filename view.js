@@ -2,14 +2,15 @@ var View = function (context, boardSize) {
   this.context = context;
   this.board = new Board(this, boardSize);
   this.animationQueue = [];
+  this.paused = true;
 };
 
 View.prototype.renderTile = function (tile) {
   this.clearTile(tile);
   var size = tile.tileSize;
-  context.font = "20px Georgia"; //TODO use cool google font
+  context.font = tile.font; //TODO use cool google font
   context.fillStyle = tile.color;
-  context.fillText(tile.val, tile.row * size + size/2, tile.col * size + size/2);
+  context.fillText(tile.val, tile.row * size + 25, tile.col * size + 45);
 }
 
 View.prototype.clearTile = function (tile) {
@@ -26,7 +27,7 @@ View.prototype.addToAnimationQueue = function(tile) {
 }
 
 View.prototype.animate = function () {
-  if (this.animationQueue.length === 0) {return;}
+  if (this.animationQueue.length === 0 || this.paused) {return;}
   let tile = this.animationQueue.shift();
 
   var self = this;
@@ -63,7 +64,7 @@ View.prototype.drawBoard = function () {
       context.stroke();
 
       var tileValue = this.board.grid[i][j] === "." ? "" : this.board.grid[i][j];
-      let tile = new Tile(tileValue, i, j, tileSize, 'black');
+      let tile = new Tile(tileValue, i, j, tileSize, 'black', '40px sans-serif');
       setTimeout(function() {
         this.renderTile(tile);
       }.bind(this), j * 125)
