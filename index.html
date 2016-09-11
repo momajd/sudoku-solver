@@ -12,18 +12,22 @@
     <script type='text/javascript' src='js/board.js'></script>
     <script type='text/javascript' src='js/view.js'></script>
 
-    <h1 class='title'>Sudoku Solver</h1>
-    <div class='view'>
-      <canvas id="canvas" width="550" height="550" style="border:1px solid #000000;">
-      </canvas>
+    <div class='container'>
+      <h1 class='title'>Sudoku Solver</h1>
+      <div class='game-view'>
+        <canvas id="canvas" width="550" height="550" style="border:1px solid #000000;">
+        </canvas>
 
-      <div class='controls'>
-        <button id='solve' onclick='solve()'>Solve</button>
-        <button onclick='resetBoard()'>New Board</button>
+        <div class='controls'>
+          <div class='controls-buttons'>
+            <button id='solve' onclick='solve()'>Solve</button>
+            <button onclick='resetBoard()'>New Board</button>
+          </div>
 
-        <fieldset class='slider-box'>
-          <legend>Speed</legend>
-          fast <input id='slider' type='range' min='0' max='200'> slow
+          <fieldset class='slider-box'>
+            <legend>Speed</legend>
+            fast <input id='slider' type='range' min='0' max='200'> slow
+          </div>
         </div>
       </div>
     </div>
