@@ -26,7 +26,7 @@ button {
 }
 
 #canvas {
-  margin: 0px 40px 0px 40px;
+  display: block;
 }
 
 .title {
@@ -46,6 +46,16 @@ button {
 .slider-box {
   border-radius: 6px;
   padding: 20px;
+}
+
+.git-logo {
+  width: 100px;
+  margin-top: 10px;
+}
+
+.board {
+  text-align: center;
+  margin: 0px 40px 0px 40px;
 }
 
 /*For slider*/
