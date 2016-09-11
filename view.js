@@ -1,6 +1,6 @@
-var View = function (context, boardSize) {
+var View = function (context, boardSize, board) {
   this.context = context;
-  this.board = new Board(this, boardSize);
+  this.board = new Board(this, boardSize, board);
   this.animationQueue = [];
   this.paused = true;
 };
@@ -10,13 +10,13 @@ View.prototype.renderTile = function (tile) {
   var size = tile.tileSize;
   context.font = tile.font; //TODO use cool google font
   context.fillStyle = tile.color;
-  context.fillText(tile.val, tile.row * size + 25, tile.col * size + 45);
+  context.fillText(tile.val, tile.col * size + 25, tile.row * size + 45);
 }
 
 View.prototype.clearTile = function (tile) {
   context.clearRect(
-    tile.row * tile.tileSize + 1/10 * tile.tileSize,
     tile.col * tile.tileSize + 1/10 * tile.tileSize,
+    tile.row * tile.tileSize + 1/10 * tile.tileSize,
     tile.tileSize * 4/5,
     tile.tileSize * 4/5
   );
@@ -46,23 +46,28 @@ View.prototype.drawBoard = function () {
   var tileSize = this.board.size / 9;
   var context = this.context;
   // heavy lines around 3 x 3 tiles
-  for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++) {
-      context.rect(i * 3 * tileSize, j * 3 * tileSize, 3 * tileSize, 3 * tileSize);
-      context.lineWidth = 4;
-      context.strokeStyle = 'black';
-      context.stroke();
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+        context.rect(i * 3 * tileSize, j * 3 * tileSize, 3 * tileSize, 3 * tileSize);
+        context.lineWidth = 4;
+        context.stroke();
     }
   }
 
-  // this lines around each tile
-  for (i = 0; i < 9; i++) {
-    for (j = 0; j < 9; j++) {
-      context.rect(i * tileSize, j * tileSize, tileSize, tileSize);
+  for (i = 1; i < 10; i++) { //we get double lines if we go from 0 to 9??
+      context.beginPath();
+      context.moveTo(i * tileSize, 0)
+      context.lineTo(i * tileSize, this.board.size);
       context.lineWidth = 1;
-      context.strokeStyle = 'black';
       context.stroke();
 
+      context.moveTo(0, i * tileSize)
+      context.lineTo(this.board.size, i * tileSize);
+      context.stroke();
+  }
+
+  for (i = 0; i < 9; i++)  {
+    for (j = 0; j < 9; j++) {
       var tileValue = this.board.grid[i][j] === "." ? "" : this.board.grid[i][j];
       let tile = new Tile(tileValue, i, j, tileSize, 'black', '40px sans-serif');
       setTimeout(function() {

@@ -27,10 +27,6 @@ button {
   padding: 20px;
 }
 
-/*#slider {
-  padding: 6px;
-}*/
-
 input[type=range] {
   -webkit-appearance: none;
   margin: 10px 0;

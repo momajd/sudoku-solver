@@ -1,43 +1,7 @@
-var board1 = [
-  "..3.1589.".split(""),
-  ".76.9.2.5".split(""),
-  ".9...2...".split(""),
-  "..7361.4.".split(""),
-  "9....41.7".split(""),
-  "...2...3.".split(""),
-  "3.......4".split(""),
-  "254.3...1".split(""),
-  ".1.5..32.".split("")
-];
-
-var board2 = [
-  ".........".split(""),
-  ".........".split(""),
-  ".........".split(""),
-  ".........".split(""),
-  ".........".split(""),
-  ".........".split(""),
-  ".........".split(""),
-  ".........".split(""),
-  ".........".split("")
-];
-
-var board4 = [
-  "1...2...4".split(""),
-  "..78.62..".split(""),
-  ".8.....3.".split(""),
-  ".3..6..9.".split(""),
-  "7..5.1..6".split(""),
-  ".4..3..7.".split(""),
-  ".5.....1.".split(""),
-  "..43.87..".split(""),
-  "6...1...5".split("")
-];
-
-var Board = function (view, size) {
+var Board = function (view, size, board) {
   this.view = view;
   this.size = size;
-  this.grid = board4;
+  this.grid = board;
 };
 
 Board.prototype.isValidSudoku = function () {
@@ -91,4 +55,16 @@ Board.prototype.solveSudoku = function () {
     }
   }
   return true; //board is filled
+};
+
+Array.prototype.dupBoard = function() {
+  var newBoard = new Array(9);
+  for (var i = 0; i < 9; i++) {newBoard[i] = (new Array(9))}
+
+  for (i = 0; i < 9; i++) {
+    for (var j = 0; j < 9; j++) {
+      newBoard[i][j] = this[i][j].slice()
+    }
+  }
+  return newBoard;
 };

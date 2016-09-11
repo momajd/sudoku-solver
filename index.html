@@ -7,17 +7,19 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <script type='text/javascript' src='board_store.js'></script>
     <script type='text/javascript' src='tile.js'></script>
     <script type='text/javascript' src='board.js'></script>
     <script type='text/javascript' src='view.js'></script>
 
     <h1 class='title'>Sudoku Solver</h1>
     <div class='view'>
-      <canvas id="canvas" width="600" height="600" style="border:1px solid #000000;">
+      <canvas id="canvas" width="550" height="550" style="border:1px solid #000000;">
       </canvas>
 
       <div class='controls'>
         <button id='solve' onclick='solve()'>Solve</button>
+        <button onclick='resetBoard()'>New Board</button>
 
         <fieldset class='slider-box'>
           <legend>Speed</legend>
@@ -29,9 +31,10 @@
     <script>
       var canvas = document.getElementById('canvas');
       var context = canvas.getContext('2d');
-      var boardSize = 600;
+      var boardSize = 550;
+      var boards = BoardStore; //see board_store.js
 
-      var view = new View(context, boardSize);
+      var view = new View(context, boardSize, boards[0].dupBoard());
       view.drawBoard();
 
       function solve() {
@@ -45,7 +48,15 @@
           view.paused = !view.paused;
           document.getElementById('solve').textContent = 'Solve';
         }
+      }
 
+      function resetBoard() {
+        view.paused = true;
+        document.getElementById('solve').textContent = 'Solve';
+
+        var randIdx = Math.floor(Math.random() * (boards.length));
+        view = new View(context, boardSize, boards[randIdx].dupBoard());
+        view.drawBoard();
       }
     </script>
 
