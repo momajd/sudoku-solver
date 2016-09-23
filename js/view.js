@@ -8,21 +8,21 @@ var View = function (context, boardSize, board) {
 View.prototype.renderTile = function (tile) {
   this.clearTile(tile);
   var size = tile.tileSize;
-  context.font = tile.font;
-  context.fillStyle = tile.color;
-  context.fillText(tile.val, tile.col * size + 25, tile.row * size + 45);
+  this.context.font = tile.font;
+  this.context.fillStyle = tile.color;
+  this.context.fillText(tile.val, tile.col * size + 25, tile.row * size + 45);
 }
 
 View.prototype.clearTile = function (tile) {
-  context.beginPath();
-  context.rect(
+  this.context.beginPath();
+  this.context.rect(
     tile.col * tile.tileSize + 1/10 * tile.tileSize,
     tile.row * tile.tileSize + 1/10 * tile.tileSize,
     tile.tileSize * 4/5,
     tile.tileSize * 4/5
   );
-  context.fillStyle = 'white';
-  context.fill();
+  this.context.fillStyle = 'white';
+  this.context.fill();
 }
 
 View.prototype.addToAnimationQueue = function(tile) {
@@ -77,7 +77,7 @@ View.prototype.drawBoard = function () {
       context.stroke();
   }
 
-  // tile values 
+  // tile values
   for (i = 0; i < 9; i++)  {
     for (j = 0; j < 9; j++) {
       var tileValue = this.board.grid[i][j] === "." ? "" : this.board.grid[i][j];
