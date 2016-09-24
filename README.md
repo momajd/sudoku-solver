@@ -26,13 +26,10 @@ Board.prototype.solveSudoku = function () {
         let tile = new Tile(vals[k], i, j, this.size / 9, 'blue', '40px Permanent Marker');
         this.view.addToAnimationQueue(tile);
 
-        if (this.isValidSudoku() ) {
-          if (this.solveSudoku()) {
-            return true;
-          }
-        }
+        if (this.isValidSudoku() && this.solveSudoku() ) {return true;}
         this.grid[i][j] = "."; //wasn't able to solve so backtrack
       }
+      
       let removal = new Tile("", i, j, this.size / 9);
       this.view.addToAnimationQueue(removal);
       return false; //no vals satisfy isValidSudoku
@@ -44,4 +41,4 @@ Board.prototype.solveSudoku = function () {
 
 ## Todo
 
-- [ ] Allow user to input their own board
+- [ ] Allow user to create a board

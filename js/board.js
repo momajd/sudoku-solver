@@ -45,12 +45,31 @@ Board.prototype.solveSudoku = function () {
         if (this.isValidSudoku() && this.solveSudoku() ) {return true;}
         this.grid[i][j] = "."; //wasn't able to solve so backtrack
       }
+
       let removal = new Tile("", i, j, this.size / 9);
       this.view.addToAnimationQueue(removal);
       return false; //no vals satisfy isValidSudoku
     }
   }
   return true; //board is filled
+};
+
+Board.prototype.insertValue = function(row, col, val) {
+  this.grid[row][col] = val;
+};
+
+Board.prototype.emptyBoard = function() {
+  this.grid = [
+      ".........".split(""),
+      ".........".split(""),
+      ".........".split(""),
+      ".........".split(""),
+      ".........".split(""),
+      ".........".split(""),
+      ".........".split(""),
+      ".........".split(""),
+      ".........".split("")
+    ];
 };
 
 Array.prototype.dupBoard = function() {

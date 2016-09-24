@@ -87,4 +87,28 @@ View.prototype.drawBoard = function () {
       }.bind(this), j * 125)
     }
   }
+
+  View.prototype.activateInput = function () {
+    this.board.emptyBoard();
+    this.drawBoard();
+    var row = 0, col = 0;
+
+    var canvas = document.getElementById('canvas');
+    var tileSize = this.board.size / 9;
+
+    canvas.addEventListener('mousedown', function (e) {
+      row = Math.floor(e.offsetY / tileSize);
+      col = Math.floor(e.offsetX / tileSize);
+    });
+
+    const vals = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+    document.addEventListener('keydown', function (e) {
+      if ( vals.has(e.key) ) {
+        this.board.insertValue(row, col, e.key);
+        var tile = new Tile(e.key, row, col, tileSize, 'black', '40px sans-serif');
+        this.renderTile(tile);
+      }
+    }.bind(this));
+
+  };
 };

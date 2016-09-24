@@ -11,6 +11,7 @@
     <script type='text/javascript' src='js/tile.js'></script>
     <script type='text/javascript' src='js/board.js'></script>
     <script type='text/javascript' src='js/view.js'></script>
+    <script type='text/javascript' src='js/view_input.js'></script>
 
     <div class='container'>
       <h1 class='title'>Sudoku Solver</h1>
@@ -36,11 +37,14 @@
             <legend>Speed</legend>
             fast <input id='slider' type='range' min='0' max='200'> slow
           </div>
+
+          <button onclick='activateInput()'>Create Board</button>
         </div>
       </div>
     </div>
 
     <script>
+    // TODO init function
       var canvas = document.getElementById('canvas');
       var context = canvas.getContext('2d');
       var boardSize = 550;
@@ -69,6 +73,11 @@
         var randIdx = Math.floor(Math.random() * (boards.length));
         view = new View(context, boardSize, boards[randIdx].dupBoard());
         view.drawBoard();
+      }
+
+      // TODO remove
+      function activateInput() {
+        view.activateInput();
       }
     </script>
 
