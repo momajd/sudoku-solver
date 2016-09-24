@@ -87,28 +87,70 @@ View.prototype.drawBoard = function () {
       }.bind(this), j * 125)
     }
   }
-
-  View.prototype.activateInput = function () {
-    this.board.emptyBoard();
-    this.drawBoard();
-    var row = 0, col = 0;
-
-    var canvas = document.getElementById('canvas');
-    var tileSize = this.board.size / 9;
-
-    canvas.addEventListener('mousedown', function (e) {
-      row = Math.floor(e.offsetY / tileSize);
-      col = Math.floor(e.offsetX / tileSize);
-    });
-
-    const vals = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
-    document.addEventListener('keydown', function (e) {
-      if ( vals.has(e.key) ) {
-        this.board.insertValue(row, col, e.key);
-        var tile = new Tile(e.key, row, col, tileSize, 'black', '40px sans-serif');
-        this.renderTile(tile);
-      }
-    }.bind(this));
-
-  };
 };
+
+View.prototype.activateInput = function () {
+  this.board.emptyBoard();
+  this.drawBoard();
+  var row = 0, col = 0;
+
+  var canvas = document.getElementById('canvas');
+  var tileSize = this.board.size / 9;
+
+  canvas.addEventListener('mousedown', function (e) {
+    this.clearExistingCursor(row, col);
+
+    row = Math.floor(e.offsetY / tileSize);
+    col = Math.floor(e.offsetX / tileSize);
+    this.drawBlinkingCursor(row, col);
+  }.bind(this));
+
+  const vals = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+  document.addEventListener('keydown', function (e) {
+    if ( vals.has(e.key) ) {
+      this.board.insertValue(row, col, e.key);
+      var tile = new Tile(e.key, row, col, tileSize, 'black', '40px sans-serif');
+      this.renderTile(tile);
+    }
+  }.bind(this));
+};
+
+View.prototype.drawCursorLine = function (row, col) {
+  var tileSize = this.board.size / 9;
+  this.context.beginPath();
+  this.context.moveTo(col * tileSize + 1/5*tileSize, row * tileSize + 1/5*tileSize);
+  this.context.lineTo(col * tileSize + 1/5*tileSize, row * tileSize + 4/5*tileSize);
+  this.context.lineWidth = 2;
+  this.context.stroke();
+};
+
+View.prototype.removeCursorLine = function (row, col) {
+  var tileSize = this.board.size / 9;
+  this.context.beginPath();
+
+  this.context.rect(
+    col * tileSize + 1/10 * tileSize,
+    row * tileSize + 1/10 * tileSize,
+    tileSize * 1/5,
+    tileSize * 4/5
+  );
+  this.context.fillStyle = 'white';
+  this.context.fill();
+}
+
+View.prototype.drawBlinkingCursor = function (row, col) {
+  var self = this;
+  self.drawCursorLine(row, col);
+
+  this.cursor = setInterval(function() {
+    self.drawCursorLine(row, col);
+    setTimeout(function() {
+      self.removeCursorLine(row, col);
+    }, 400);
+  }, 800);
+};
+
+View.prototype.clearExistingCursor = function (row, col) {
+  clearInterval(this.cursor);
+  this.removeCursorLine(row, col);
+}
