@@ -93,6 +93,7 @@ View.prototype.activateInput = function () {
   this.board.emptyBoard();
   this.drawBoard();
   var row = 0, col = 0;
+  this.drawBlinkingCursor(row, col);
 
   var canvas = document.getElementById('canvas');
   var tileSize = this.board.size / 9;
@@ -111,8 +112,20 @@ View.prototype.activateInput = function () {
       this.board.insertValue(row, col, e.key);
       var tile = new Tile(e.key, row, col, tileSize, 'black', '40px sans-serif');
       this.renderTile(tile);
+    } else if ( e.keyCode >= 37 && e.keyCode <= 40 ) {
+      // move cursor with arrow keys
+      this.clearExistingCursor(row, col);
+      if ( e.key === "ArrowDown" && row < 8 ) { row += 1; }
+      if ( e.key === "ArrowUp" && row > 0 ) { row -= 1; }
+      if ( e.key === "ArrowRight" && col < 8 ) { col += 1; }
+      if ( e.key === "ArrowLeft" && col > 0 ) { col -= 1; }
+      this.drawBlinkingCursor(row, col);
     }
   }.bind(this));
+};
+
+View.prototype.deactivateInput = function () {
+  
 };
 
 View.prototype.drawCursorLine = function (row, col) {
@@ -120,7 +133,7 @@ View.prototype.drawCursorLine = function (row, col) {
   this.context.beginPath();
   this.context.moveTo(col * tileSize + 1/5*tileSize, row * tileSize + 1/5*tileSize);
   this.context.lineTo(col * tileSize + 1/5*tileSize, row * tileSize + 4/5*tileSize);
-  this.context.lineWidth = 2;
+  this.context.lineWidth = 3;
   this.context.stroke();
 };
 
