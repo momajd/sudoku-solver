@@ -92,6 +92,7 @@ View.prototype.drawBoard = function () {
 View.prototype.activateInput = function () {
   this.board.emptyBoard();
   this.drawBoard();
+  this.animationQueue = []; //reset so we don't animate previous game
 
   // save cursor as instance variable so we an deactivate
   this.cursor = new Cursor(this.context, this.board.size / 9);
@@ -107,7 +108,6 @@ View.prototype.activateInput = function () {
 };
 
 View.prototype.mouseListener = function (e) {
-  if (!this.paused) {return;}
   cursor.clearExistingCursor();
   var tileSize = this.board.size / 9;
 
@@ -118,7 +118,6 @@ View.prototype.mouseListener = function (e) {
 };
 
 View.prototype.keyListener = function (e) {
-  if (!this.paused) {return;}
   const vals = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
   var tileSize = this.board.size / 9;
 
