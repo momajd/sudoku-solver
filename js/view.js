@@ -92,78 +92,55 @@ View.prototype.drawBoard = function () {
 View.prototype.activateInput = function () {
   this.board.emptyBoard();
   this.drawBoard();
-  var row = 0, col = 0;
-  this.drawBlinkingCursor(row, col);
+
+  // save cursor as instance variable so we an deactivate
+  this.cursor = new Cursor(this.context, this.board.size / 9);
+  cursor = this.cursor;
+  cursor.drawBlinkingCursor();
 
   var canvas = document.getElementById('canvas');
+  mouseListener = this.mouseListener.bind(this);
+  canvas.addEventListener('mousedown', mouseListener);
+
+  keyListener = this.keyListener.bind(this);
+  document.addEventListener('keydown', keyListener);
+};
+
+View.prototype.mouseListener = function (e) {
+  if (!this.paused) {return;}
+  cursor.clearExistingCursor();
   var tileSize = this.board.size / 9;
 
-  canvas.addEventListener('mousedown', function (e) {
-    this.clearExistingCursor(row, col);
+  row = Math.floor(e.offsetY / tileSize);
+  col = Math.floor(e.offsetX / tileSize);
+  cursor.updatePosition(row, col);
+  cursor.drawBlinkingCursor();
+};
 
-    row = Math.floor(e.offsetY / tileSize);
-    col = Math.floor(e.offsetX / tileSize);
-    this.drawBlinkingCursor(row, col);
-  }.bind(this));
-
+View.prototype.keyListener = function (e) {
+  if (!this.paused) {return;}
   const vals = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
-  document.addEventListener('keydown', function (e) {
-    if ( vals.has(e.key) ) {
-      this.board.insertValue(row, col, e.key);
-      var tile = new Tile(e.key, row, col, tileSize, 'black', '40px sans-serif');
-      this.renderTile(tile);
-    } else if ( e.keyCode >= 37 && e.keyCode <= 40 ) {
-      // move cursor with arrow keys
-      this.clearExistingCursor(row, col);
-      if ( e.key === "ArrowDown" && row < 8 ) { row += 1; }
-      if ( e.key === "ArrowUp" && row > 0 ) { row -= 1; }
-      if ( e.key === "ArrowRight" && col < 8 ) { col += 1; }
-      if ( e.key === "ArrowLeft" && col > 0 ) { col -= 1; }
-      this.drawBlinkingCursor(row, col);
-    }
-  }.bind(this));
+  var tileSize = this.board.size / 9;
+
+  if ( vals.has(e.key) ) {
+    this.board.insertValue(cursor.row, cursor.col, e.key);
+    var tile = new Tile(e.key, cursor.row, cursor. col, tileSize, 'black', '40px sans-serif');
+    this.renderTile(tile);
+  } else if ( e.keyCode >= 37 && e.keyCode <= 40 ) {
+    // move cursor with arrow keys
+    cursor.clearExistingCursor();
+
+    if ( e.key === "ArrowDown" && cursor.row < 8 ) { cursor.row += 1; }
+    if ( e.key === "ArrowUp" && cursor.row > 0 ) { cursor.row -= 1; }
+    if ( e.key === "ArrowRight" && cursor.col < 8 ) { cursor.col += 1; }
+    if ( e.key === "ArrowLeft" && cursor.col > 0 ) { cursor.col -= 1; }
+
+    cursor.drawBlinkingCursor();
+  }
 };
 
 View.prototype.deactivateInput = function () {
-  
+  this.cursor.clearExistingCursor();
+  document.getElementById('canvas').removeEventListener('mousedown', mouseListener);
+  document.removeEventListener('keydown', keyListener);
 };
-
-View.prototype.drawCursorLine = function (row, col) {
-  var tileSize = this.board.size / 9;
-  this.context.beginPath();
-  this.context.moveTo(col * tileSize + 1/5*tileSize, row * tileSize + 1/5*tileSize);
-  this.context.lineTo(col * tileSize + 1/5*tileSize, row * tileSize + 4/5*tileSize);
-  this.context.lineWidth = 3;
-  this.context.stroke();
-};
-
-View.prototype.removeCursorLine = function (row, col) {
-  var tileSize = this.board.size / 9;
-  this.context.beginPath();
-
-  this.context.rect(
-    col * tileSize + 1/10 * tileSize,
-    row * tileSize + 1/10 * tileSize,
-    tileSize * 1/5,
-    tileSize * 4/5
-  );
-  this.context.fillStyle = 'white';
-  this.context.fill();
-}
-
-View.prototype.drawBlinkingCursor = function (row, col) {
-  var self = this;
-  self.drawCursorLine(row, col);
-
-  this.cursor = setInterval(function() {
-    self.drawCursorLine(row, col);
-    setTimeout(function() {
-      self.removeCursorLine(row, col);
-    }, 400);
-  }, 800);
-};
-
-View.prototype.clearExistingCursor = function (row, col) {
-  clearInterval(this.cursor);
-  this.removeCursorLine(row, col);
-}

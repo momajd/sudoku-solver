@@ -11,7 +11,7 @@
     <script type='text/javascript' src='js/tile.js'></script>
     <script type='text/javascript' src='js/board.js'></script>
     <script type='text/javascript' src='js/view.js'></script>
-    <script type='text/javascript' src='js/view_input.js'></script>
+    <script type='text/javascript' src='js/cursor.js'></script>
 
     <div class='container'>
       <h1 class='title'>Sudoku Solver</h1>
@@ -54,6 +54,7 @@
       view.drawBoard();
 
       function solve() {
+        view.deactivateInput();
         view.board.solveSudoku();
 
         if (view.paused) {
