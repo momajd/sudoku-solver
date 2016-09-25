@@ -142,16 +142,20 @@ View.prototype.keyListener = function (e) {
 
     var tile = new Tile(e.key, cursor.row, cursor. col, tileSize, 'black', '40px sans-serif');
     this.renderTile(tile);
+    
   } else if ( e.keyCode >= 37 && e.keyCode <= 40 ) {
     // move cursor with arrow keys
     cursor.clearExistingCursor();
-
     if ( e.key === "ArrowDown" && cursor.row < 8 ) { cursor.row += 1; }
     if ( e.key === "ArrowUp" && cursor.row > 0 ) { cursor.row -= 1; }
     if ( e.key === "ArrowRight" && cursor.col < 8 ) { cursor.col += 1; }
     if ( e.key === "ArrowLeft" && cursor.col > 0 ) { cursor.col -= 1; }
-
     cursor.drawBlinkingCursor();
+
+  } else if ( e.code === "Space") {
+    this.board.insertValue(cursor.row, cursor.col, ".");
+    var removal = new Tile("", cursor.row, cursor.col, tileSize);
+    this.clearTile(removal);
   }
 };
 

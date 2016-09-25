@@ -38,7 +38,7 @@
             fast <input id='slider' type='range' min='0' max='200'> slow
           </fieldset>
 
-          <button class='create-button' onclick='activateInput()'>Create A Board
+          <button id='create' onclick='activateInput()'>Create A Board
           </button>
 
           <br/><br/>
@@ -47,7 +47,8 @@
             <div class='instructions'>
               Move the cursor with the arrow keys or mouse. <br/><br/>
               Insert any number from 1 to 9.<br/><br/>
-              Hit Solve when finished.
+              Hit space to clear a number.<br/><br/>
+              Click Solve when finished.
             </div>
           </fieldset>
         </div>
@@ -89,6 +90,7 @@
       }
 
       function activateInput() {
+        document.getElementById('create').blur();
         document.getElementById('solve').textContent = 'Solve';
         document.getElementsByClassName('instructions-container')[0].style.visibility='visible';
         view.activateInput();
