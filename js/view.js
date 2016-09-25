@@ -90,39 +90,56 @@ View.prototype.drawBoard = function () {
 };
 
 View.prototype.activateInput = function () {
+  this.deactivateInput(); //remove existing cursor if one exists
   this.board.emptyBoard();
   this.drawBoard();
+  this.paused = true;
   this.animationQueue = []; //reset so we don't animate previous game
 
-  // save cursor as instance variable so we an deactivate
+  // save cursor as instance variable so we can deactivate
   this.cursor = new Cursor(this.context, this.board.size / 9);
-  cursor = this.cursor;
-  cursor.drawBlinkingCursor();
+  this.cursor.drawBlinkingCursor();
 
   var canvas = document.getElementById('canvas');
-  mouseListener = this.mouseListener.bind(this);
+  var mouseListener = this.mouseListener.bind(this);
   canvas.addEventListener('mousedown', mouseListener);
 
-  keyListener = this.keyListener.bind(this);
+  var keyListener = this.keyListener.bind(this);
   document.addEventListener('keydown', keyListener);
+
+  var buttons = document.getElementsByTagName('button');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function () {
+      canvas.removeEventListener('mousedown', mouseListener);
+      document.removeEventListener('keydown', keyListener);
+    });
+  }
 };
 
 View.prototype.mouseListener = function (e) {
-  cursor.clearExistingCursor();
+  this.cursor.clearExistingCursor();
   var tileSize = this.board.size / 9;
 
   row = Math.floor(e.offsetY / tileSize);
   col = Math.floor(e.offsetX / tileSize);
-  cursor.updatePosition(row, col);
-  cursor.drawBlinkingCursor();
+  this.cursor.updatePosition(row, col);
+  this.cursor.drawBlinkingCursor();
 };
 
 View.prototype.keyListener = function (e) {
   const vals = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
   var tileSize = this.board.size / 9;
+  var cursor = this.cursor;
 
   if ( vals.has(e.key) ) {
     this.board.insertValue(cursor.row, cursor.col, e.key);
+
+    if (!this.board.isValidSudoku()) {
+      alert("That's not a valid board!");
+      this.board.insertValue(cursor.row, cursor.col, ".");
+      return;
+    }
+
     var tile = new Tile(e.key, cursor.row, cursor. col, tileSize, 'black', '40px sans-serif');
     this.renderTile(tile);
   } else if ( e.keyCode >= 37 && e.keyCode <= 40 ) {
@@ -139,7 +156,5 @@ View.prototype.keyListener = function (e) {
 };
 
 View.prototype.deactivateInput = function () {
-  this.cursor.clearExistingCursor();
-  document.getElementById('canvas').removeEventListener('mousedown', mouseListener);
-  document.removeEventListener('keydown', keyListener);
+  if (this.cursor) {this.cursor.clearExistingCursor();}
 };

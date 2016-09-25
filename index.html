@@ -36,15 +36,26 @@
           <fieldset class='slider-box'>
             <legend>Speed</legend>
             fast <input id='slider' type='range' min='0' max='200'> slow
-          </div>
+          </fieldset>
 
-          <button onclick='activateInput()'>Create Board</button>
+          <button class='create-button' onclick='activateInput()'>Create A Board
+          </button>
+
+          <br/><br/>
+          <fieldset class='instructions-container'>
+            <legend>Instructions</legend>
+            <div class='instructions'>
+              Move the cursor with the arrow keys or mouse. <br/><br/>
+              Insert values 0 thru 9.<br/><br/>
+              Hit Solve when finished.
+            </div>
+          </fieldset>
         </div>
+
       </div>
     </div>
 
     <script>
-    // TODO init function
       var canvas = document.getElementById('canvas');
       var context = canvas.getContext('2d');
       var boardSize = 550;
@@ -69,6 +80,7 @@
 
       function resetBoard() {
         view.paused = true;
+        view.deactivateInput();
         document.getElementById('solve').textContent = 'Solve';
 
         var randIdx = Math.floor(Math.random() * (boards.length));
@@ -76,8 +88,9 @@
         view.drawBoard();
       }
 
-      // TODO remove
       function activateInput() {
+        document.getElementById('solve').textContent = 'Solve';
+        document.getElementsByClassName('instructions-container')[0].style.visibility='visible';
         view.activateInput();
       }
     </script>
