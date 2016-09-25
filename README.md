@@ -29,7 +29,7 @@ Board.prototype.solveSudoku = function () {
         if (this.isValidSudoku() && this.solveSudoku() ) {return true;}
         this.grid[i][j] = "."; //wasn't able to solve so backtrack
       }
-      
+
       let removal = new Tile("", i, j, this.size / 9);
       this.view.addToAnimationQueue(removal);
       return false; //no vals satisfy isValidSudoku
@@ -41,4 +41,4 @@ Board.prototype.solveSudoku = function () {
 
 ## Todo
 
-- [ ] Allow user to create a board
+- [X] Allow user to create a board

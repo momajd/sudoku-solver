@@ -127,7 +127,7 @@ View.prototype.mouseListener = function (e) {
 };
 
 View.prototype.keyListener = function (e) {
-  const vals = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+  const vals = new Set(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
   var tileSize = this.board.size / 9;
   var cursor = this.cursor;
 
