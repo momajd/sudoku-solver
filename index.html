@@ -38,6 +38,11 @@
             fast <input id='slider' type='range' min='0' max='200'> slow
           </fieldset>
 
+          <div class='iterations'>
+            Iterations:
+            <span id='iteration-count'>0</span>
+          </div>
+
           <button id='create' onclick='activateInput()'>Create A Board
           </button>
 
@@ -82,6 +87,7 @@
       function resetBoard() {
         view.paused = true;
         view.deactivateInput();
+        view.resetIterationCount();
         document.getElementById('solve').textContent = 'Solve';
 
         var randIdx = Math.floor(Math.random() * (boards.length));
@@ -90,11 +96,13 @@
       }
 
       function activateInput() {
+        view.resetIterationCount();
         document.getElementById('create').blur();
         document.getElementById('solve').textContent = 'Solve';
         document.getElementsByClassName('instructions-container')[0].style.visibility='visible';
         view.activateInput();
       }
+
     </script>
 
   </body>

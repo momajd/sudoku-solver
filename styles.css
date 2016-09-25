@@ -29,6 +29,11 @@ button {
   margin-bottom: 20px;
 }
 
+.iterations {
+  margin: 32px 0px 0px 26px;
+  font-size: 18px;
+}
+
 .instructions {
   text-align: center;
   font-size: 12px;

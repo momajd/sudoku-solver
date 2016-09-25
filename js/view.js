@@ -3,6 +3,7 @@ var View = function (context, boardSize, board) {
   this.board = new Board(this, boardSize, board);
   this.animationQueue = [];
   this.paused = true;
+  this.animationCount = 0;
 };
 
 View.prototype.renderTile = function (tile) {
@@ -31,6 +32,7 @@ View.prototype.addToAnimationQueue = function(tile) {
 
 View.prototype.animate = function () {
   if (this.animationQueue.length === 0 || this.paused) {return;}
+  this.updateIterationCount();
   let tile = this.animationQueue.shift();
 
   var self = this;
@@ -142,7 +144,7 @@ View.prototype.keyListener = function (e) {
 
     var tile = new Tile(e.key, cursor.row, cursor. col, tileSize, 'black', '40px sans-serif');
     this.renderTile(tile);
-    
+
   } else if ( e.keyCode >= 37 && e.keyCode <= 40 ) {
     // move cursor with arrow keys
     cursor.clearExistingCursor();
@@ -162,3 +164,13 @@ View.prototype.keyListener = function (e) {
 View.prototype.deactivateInput = function () {
   if (this.cursor) {this.cursor.clearExistingCursor();}
 };
+
+View.prototype.updateIterationCount = function () {
+  this.animationCount++;
+  document.getElementById('iteration-count').innerHTML = this.animationCount;
+};
+
+View.prototype.resetIterationCount = function () {
+  this.animationCount = 0;
+  document.getElementById('iteration-count').innerHTML = 0;
+}

@@ -70,6 +70,7 @@ Board.prototype.emptyBoard = function() {
       ".........".split(""),
       ".........".split("")
     ];
+  this.iterationCount = 0;
 };
 
 Array.prototype.dupBoard = function() {
