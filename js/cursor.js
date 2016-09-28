@@ -1,53 +1,55 @@
-var Cursor = function (context, tileSize) {
-  this.row = 0;
-  this.col = 0;
-  this.context = context;
-  this.tileSize = tileSize;
-};
+class Cursor {
+  constructor(context, tileSize) {
+    this.row = 0;
+    this.col = 0;
+    this.context = context;
+    this.tileSize = tileSize;
+  }
 
-Cursor.prototype.drawCursorLine = function () {
-  var size = this.tileSize;
-  var row = this.row;
-  var col = this.col;
-  this.context.beginPath();
-  this.context.moveTo(col * size + 1/5*size, row * size + 1/5*size);
-  this.context.lineTo(col * size + 1/5*size, row * size + 4/5*size);
-  this.context.lineWidth = 2;
-  this.context.stroke();
-};
+  drawCursorLine() {
+    let size = this.tileSize;
+    let row = this.row;
+    let col = this.col;
+    this.context.beginPath();
+    this.context.moveTo(col * size + 1/5*size, row * size + 1/5*size);
+    this.context.lineTo(col * size + 1/5*size, row * size + 4/5*size);
+    this.context.lineWidth = 2;
+    this.context.stroke();
+  }
 
-Cursor.prototype.removeCursorLine = function () {
-  var tileSize = this.tileSize;
-  this.context.beginPath();
+  removeCursorLine() {
+    let tileSize = this.tileSize;
+    this.context.beginPath();
 
-  this.context.rect(
-    this.col * tileSize + 1/10 * tileSize,
-    this.row * tileSize + 1/10 * tileSize,
-    tileSize * 1/5,
-    tileSize * 4/5
-  );
-  this.context.fillStyle = 'white';
-  this.context.fill();
-};
+    this.context.rect(
+      this.col * tileSize + 1/10 * tileSize,
+      this.row * tileSize + 1/10 * tileSize,
+      tileSize * 1/5,
+      tileSize * 4/5
+    );
+    this.context.fillStyle = 'white';
+    this.context.fill();
+  }
 
-Cursor.prototype.drawBlinkingCursor = function () {
-  this.drawCursorLine();
-  var self = this;
+  drawBlinkingCursor() {
+    this.drawCursorLine();
+    let self = this;
 
-  this.interval = setInterval(function() {
-    self.drawCursorLine();
-    setTimeout(function() {
-      self.removeCursorLine();
-    }, 400);
-  }, 800);
-};
+    this.interval = setInterval(function() {
+      self.drawCursorLine();
+      setTimeout(function() {
+        self.removeCursorLine();
+      }, 400);
+    }, 800);
+  }
 
-Cursor.prototype.clearExistingCursor = function () {
-  clearInterval(this.interval);
-  this.removeCursorLine();
-};
+  clearExistingCursor() {
+    clearInterval(this.interval);
+    this.removeCursorLine();
+  }
 
-Cursor.prototype.updatePosition = function (row, col) {
-  this.row = row;
-  this.col = col;
-};
+  updatePosition(row, col) {
+    this.row = row;
+    this.col = col;
+  }
+}

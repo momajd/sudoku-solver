@@ -13,14 +13,14 @@ A sudoku solver that uses a backtracking algorithm. Built with javascript and HT
 ```javascript
 // board.js
 
-Board.prototype.solveSudoku = function () {
-  for (var i = 0; i < 9; i++) {
-    for (var j = 0; j < 9; j++) {
+solveSudoku() {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
       if (this.grid[i][j] !== ".") { continue; }
 
-      var vals = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      const vals = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
-      for (var k = 0; k < vals.length; k++) {
+      for (let k = 0; k < vals.length; k++) {
         this.grid[i][j] = vals[k];
 
         let tile = new Tile(vals[k], i, j, this.size / 9, 'blue', '40px Permanent Marker');
@@ -36,7 +36,32 @@ Board.prototype.solveSudoku = function () {
     }
   }
   return true; //board is filled
-};
+}
+```
+
+## Algorithm visualization
+Animations from the `animationQueue` are processed asynchronously:
+
+```javascript
+// view.js
+
+animate() {
+  if (this.animationQueue.length === 0 || this.paused) {return;}
+  this.updateIterationCount();
+  let tile = this.animationQueue.shift();
+
+  let self = this;
+  let timing = document.getElementById('slider').value;
+  setTimeout(function() {
+    if (tile.val === "") {
+      self.clearTile(tile);
+    } else {
+      self.renderTile(tile);
+    }
+    self.animate();
+  }, timing);
+}
+
 ```
 
 ## Todo

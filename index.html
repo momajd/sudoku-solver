@@ -71,6 +71,7 @@
       view.drawBoard();
 
       function solve() {
+        hideInstructions();
         view.deactivateInput();
         view.board.solveSudoku();
 
@@ -88,6 +89,7 @@
         view.paused = true;
         view.deactivateInput();
         view.resetIterationCount();
+        hideInstructions();
         document.getElementById('solve').textContent = 'Solve';
 
         var randIdx = Math.floor(Math.random() * (boards.length));
@@ -101,6 +103,10 @@
         document.getElementById('solve').textContent = 'Solve';
         document.getElementsByClassName('instructions-container')[0].style.visibility='visible';
         view.activateInput();
+      }
+
+      function hideInstructions() {
+        document.getElementsByClassName('instructions-container')[0].style.visibility='hidden';
       }
 
     </script>
