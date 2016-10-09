@@ -177,4 +177,16 @@ class View {
     this.animationCount = 0;
     document.getElementById('iteration-count').innerHTML = 0;
   }
+
+  skipAnimation() {
+    this.paused = true;
+    // setTimeout to ensure that nothing in the event queue overrides our values
+    setTimeout(function() {
+      this.animationQueue.forEach(tile => {
+        this.renderTile(tile);
+        this.updateIterationCount();
+      });
+      this.animationQueue = [];
+    }.bind(this), 100);
+  }
 }
